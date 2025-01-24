@@ -2,11 +2,11 @@ pipeline {
     agent any
 
     stages {
-        stage('Declarative: Checkout SCM') {
+        stage('Declarative2: Checkout SCM') {
             steps {
                 checkout scm
             }
         }
     }
-    
+
 }
