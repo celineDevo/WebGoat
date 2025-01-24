@@ -1,0 +1,11 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Declarative: Checkout SCM') {
+            steps {
+                checkout scm
+            }
+        }
+    }
+}
