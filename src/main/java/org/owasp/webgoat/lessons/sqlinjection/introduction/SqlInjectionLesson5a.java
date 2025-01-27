@@ -65,7 +65,7 @@ public class SqlInjectionLesson5a implements AssignmentEndpoint {
       query =
           "SELECT * FROM user_data WHERE first_name = 'John' and last_name = ?";
       try (PreparedStatement preparedStatement =
-          connection.preparedStatement(
+          connection.preparedStatement(query,
               ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
                 preparedStatement.setString(1, accountName);
                 ResultSet results = preparedStatement.executeQuery();

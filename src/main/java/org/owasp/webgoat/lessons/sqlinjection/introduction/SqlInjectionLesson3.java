@@ -62,9 +62,14 @@ public class SqlInjectionLesson3 implements AssignmentEndpoint {
           connection.createStatement(TYPE_SCROLL_INSENSITIVE, CONCUR_READ_ONLY)) {
         Statement checkStatement =
             connection.createStatement(TYPE_SCROLL_INSENSITIVE, CONCUR_READ_ONLY);
-        statement.executeUpdate(query);
-        ResultSet results =
-            checkStatement.executeQuery("SELECT * FROM employees WHERE last_name='Barnett';");
+        PreparedStatement preparedStatement = connection.preparedStatement(query,TYPE_SCROLL_INSENSITIVE, CONCUR_READ_ONLY);
+        preparedStatement.executeUpdate(query);
+        //statement.executeUpdate(query);
+        //ResultSet results =
+        //    checkStatement.executeQuery("SELECT * FROM employees WHERE last_name='Barnett';");
+        String query2 = "SELECT * FROM employees WHERE last_name='Barnett';";
+        PreparedStatement preparedStatement2 = connection.preparedStatement(query2);
+        ResultSet results = preparedStatement2.executeQuery();
         StringBuilder output = new StringBuilder();
         // user completes lesson if the department of Tobi Barnett now is 'Sales'
         results.first();
