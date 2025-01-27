@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage("Clone WebGoat from Github") {
+/*         stage("Clone WebGoat from Github") {
         steps {
             echo "'Cloning WebGoat from Github..."
             git url: 'https://github.com/celineDevo/WebGoat.git', branch: 'main'
@@ -13,7 +13,7 @@ pipeline {
             steps {
                 sh "chmod 777 ${WORKSPACE}/"
             }
-        }
+        } */
 /* 
         stage('Checkmarx AST analysis') {
             steps {
