@@ -8,7 +8,7 @@ pipeline {
                 baseAuthUrl: '', 
                 branchName: 'main', 
                 checkmarxInstallation: 'CxOne', 
-                credentialsId: '', 
+                credentialsId: 'JenkinsSecurityGates', 
                 projectName: 'webGoat', 
                 serverUrl: '', 
                 tenantName: '', 
