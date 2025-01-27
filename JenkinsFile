@@ -2,33 +2,6 @@ pipeline {
     agent any
 
     stages {
-/*         stage("Clone WebGoat from Github") {
-        steps {
-            echo "'Cloning WebGoat from Github..."
-            git url: 'https://github.com/celineDevo/WebGoat.git', branch: 'main'
-        }
-        
-        }
-        stage("Change Permissions") {
-            steps {
-                sh "chmod 777 ${WORKSPACE}/"
-            }
-        } */
-/* 
-        stage('Checkmarx AST analysis') {
-            steps {
-                checkmarxASTScanner additionalOptions: ' --threshold "sast-high=10; sast-medium=20; sca-high=10" --report-format sarif --output-name "help" --', 
-                baseAuthUrl: '', 
-                branchName: 'main', 
-                checkmarxInstallation: 'CxOne', 
-                credentialsId: 'JenkinsSecurityGates', 
-                projectName: 'WebGoat', 
-                serverUrl: '', 
-                tenantName: '', 
-                useOwnAdditionalOptions: true
-            }
-        } */
-
         stage('Checkmarx AST analysis') {
             steps {
                 checkmarxASTScanner additionalOptions: "--threshold \"sast-high=10; sast-medium=20; sca-high=10\"  --report-format sarif  --output-name \"help\"", 
