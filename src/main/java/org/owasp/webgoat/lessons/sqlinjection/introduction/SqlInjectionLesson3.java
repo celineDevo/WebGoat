@@ -63,7 +63,7 @@ public class SqlInjectionLesson3 implements AssignmentEndpoint {
         Statement checkStatement =
             connection.createStatement(TYPE_SCROLL_INSENSITIVE, CONCUR_READ_ONLY);
         PreparedStatement preparedStatement = connection.preparedStatement(query,TYPE_SCROLL_INSENSITIVE, CONCUR_READ_ONLY);
-        preparedStatement.executeUpdate(query);
+        preparedStatement.executeUpdate();
         //statement.executeUpdate(query);
         //ResultSet results =
         //    checkStatement.executeQuery("SELECT * FROM employees WHERE last_name='Barnett';");

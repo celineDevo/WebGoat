@@ -59,11 +59,16 @@ public class SqlInjectionLesson4 implements AssignmentEndpoint {
 
   protected AttackResult injectableQuery(String query) {
     try (Connection connection = dataSource.getConnection()) {
-      try (Statement statement =
-          connection.createStatement(TYPE_SCROLL_INSENSITIVE, CONCUR_READ_ONLY)) {
-        statement.executeUpdate(query);
+      try (/* Statement statement =
+          connection.createStatement(TYPE_SCROLL_INSENSITIVE, CONCUR_READ_ONLY) */
+          PreparedStatement statement = connection.prepareStatement(query, TYPE_SCROLL_INSENSITIVE, CONCUR_READ_ONLY)) {
+        //statement.executeUpdate(query);
+        statement.executeUpdate();
         connection.commit();
-        ResultSet results = statement.executeQuery("SELECT phone from employees;");
+        String query2 = "SELECT phone from employees;";
+        PreparedStatement preparedStatement = connection.prepareStatement(query2);
+        ResultSet results = preparedStatement.executeQuery();
+        //ResultSet results = statement.executeQuery("SELECT phone from employees;");
         StringBuilder output = new StringBuilder();
         // user completes lesson if column phone exists
         if (results.first()) {

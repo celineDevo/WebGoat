@@ -77,10 +77,17 @@ public class SqlInjectionLesson5 implements AssignmentEndpoint {
 
   protected AttackResult injectableQuery(String query) {
     try (Connection connection = dataSource.getConnection()) {
-      try (Statement statement =
+/*       try (Statement statement =
           connection.createStatement(
               ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
         statement.executeQuery(query);
+        if (checkSolution(connection)) {
+          return success(this).build();
+        }
+        return failed(this).output("Your query was: " + query).build();
+      } */
+     try ( PreparedStatement preparedStatement = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+        preparedStatement.executeQuery();
         if (checkSolution(connection)) {
           return success(this).build();
         }
