@@ -47,7 +47,7 @@ public class VulnerableComponentsLessonTest {
     Exception e =
         assertThrows(
             RuntimeException.class,
-            () -> ((Contact) xstream.fromXML(strangeContact)).getFirstName());
+            ((Contact) xstream.fromXML(strangeContact))::getFirstName);
     assertThat(e.getCause().getMessage().contains("calc.exe")).isTrue();
   }
 
@@ -59,7 +59,7 @@ public class VulnerableComponentsLessonTest {
     xstream.ignoreUnknownElements();
     Exception e =
         assertThrows(
-            StreamException.class, () -> ((Contact) xstream.fromXML("bullssjfs")).getFirstName());
+            StreamException.class, ((Contact) xstream.fromXML("bullssjfs"))::getFirstName);
     assertThat(e.getCause().getMessage().contains("START_DOCUMENT")).isTrue();
   }
 }

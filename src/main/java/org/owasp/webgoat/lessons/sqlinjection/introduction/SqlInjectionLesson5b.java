@@ -68,7 +68,7 @@ public class SqlInjectionLesson5b implements AssignmentEndpoint {
       try {
         ResultSet results = query.executeQuery();
 
-        if ((results != null) && (results.first() == true)) {
+        if ((results != null) && (results.first())) {
           ResultSetMetaData resultsMetaData = results.getMetaData();
           StringBuilder output = new StringBuilder();
 

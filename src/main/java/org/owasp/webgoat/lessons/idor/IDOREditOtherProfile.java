@@ -57,7 +57,7 @@ public class IDOREditOtherProfile implements AssignmentEndpoint {
       // we will persist in the session object for now in case we want to refer back or use it later
       userSessionData.setValue("idor-updated-other-profile", currentUserProfile);
       if (currentUserProfile.getRole() <= 1
-          && currentUserProfile.getColor().equalsIgnoreCase("red")) {
+          && "red".equalsIgnoreCase(currentUserProfile.getColor())) {
         return success(this)
             .feedback("idor.edit.profile.success1")
             .output(currentUserProfile.profileToMap().toString())
@@ -65,7 +65,7 @@ public class IDOREditOtherProfile implements AssignmentEndpoint {
       }
 
       if (currentUserProfile.getRole() > 1
-          && currentUserProfile.getColor().equalsIgnoreCase("red")) {
+          && "red".equalsIgnoreCase(currentUserProfile.getColor())) {
         return failed(this)
             .feedback("idor.edit.profile.failure1")
             .output(currentUserProfile.profileToMap().toString())
@@ -73,7 +73,7 @@ public class IDOREditOtherProfile implements AssignmentEndpoint {
       }
 
       if (currentUserProfile.getRole() <= 1
-          && !currentUserProfile.getColor().equalsIgnoreCase("red")) {
+          && !"red".equalsIgnoreCase(currentUserProfile.getColor())) {
         return failed(this)
             .feedback("idor.edit.profile.failure2")
             .output(currentUserProfile.profileToMap().toString())
@@ -90,7 +90,7 @@ public class IDOREditOtherProfile implements AssignmentEndpoint {
       return failed(this).feedback("idor.edit.profile.failure4").build();
     }
 
-    if (currentUserProfile.getColor().equals("black") && currentUserProfile.getRole() <= 1) {
+    if ("black".equals(currentUserProfile.getColor()) && currentUserProfile.getRole() <= 1) {
       return success(this)
           .feedback("idor.edit.profile.success2")
           .output(userSessionData.getValue("idor-updated-own-profile").toString())

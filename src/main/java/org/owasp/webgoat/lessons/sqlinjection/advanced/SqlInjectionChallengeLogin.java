@@ -44,7 +44,7 @@ public class SqlInjectionChallengeLogin implements AssignmentEndpoint {
       var resultSet = statement.executeQuery();
 
       if (resultSet.next()) {
-        return ("tom".equals(username_login))
+        return "tom".equals(username_login)
             ? success(this).build()
             : failed(this).feedback("ResultsButNotTom").build();
       } else {

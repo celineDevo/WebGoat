@@ -59,6 +59,6 @@ public class SqlInjectionLesson6b implements AssignmentEndpoint {
       e.printStackTrace();
       // do nothing
     }
-    return (password);
+    return password;
   }
 }

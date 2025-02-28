@@ -46,6 +46,6 @@ public class WebWolfMacro extends InlineMacroProcessor {
   }
 
   private boolean displayCompleteLinkNoFormatting(Map<String, Object> attributes) {
-    return attributes.values().stream().anyMatch(a -> a.equals("noLink"));
+    return attributes.values().stream().anyMatch("noLink"::equals);
   }
 }

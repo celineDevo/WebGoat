@@ -35,7 +35,7 @@ public class DOMCrossSiteScripting implements AssignmentEndpoint {
 
     if (param1 == 42
         && param2 == 24
-        && request.getHeader("webgoat-requested-by").equals("dom-xss-vuln")) {
+        && "dom-xss-vuln".equals(request.getHeader("webgoat-requested-by"))) {
       return success(this)
           .output("phoneHome Response is " + lessonSession.getValue("randValue").toString())
           .build();

@@ -34,7 +34,7 @@ public class LessonProgress {
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private final Set<AssignmentProgress> assignments = new HashSet<>();
 
-  @Getter private int numberOfAttempts = 0;
+  @Getter private int numberOfAttempts;
   @Version private Integer version;
 
   protected LessonProgress() {

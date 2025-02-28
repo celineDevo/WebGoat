@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
  */
 public class SqlInjectionLesson10Test extends LessonTest {
 
-  private String completedError = "JSON path \"lessonCompleted\"";
+  private final String completedError = "JSON path \"lessonCompleted\"";
 
   @Test
   public void tableExistsIsFailure() throws Exception {
@@ -29,7 +29,9 @@ public class SqlInjectionLesson10Test extends LessonTest {
           .andExpect(jsonPath("lessonCompleted", is(false)))
           .andExpect(jsonPath("$.feedback", is(messages.getMessage("sql-injection.10.entries"))));
     } catch (AssertionError e) {
-      if (!e.getMessage().contains(completedError)) throw e;
+      if (!e.getMessage().contains(completedError)) {
+        throw e;
+      }
 
       mockMvc
           .perform(MockMvcRequestBuilders.post("/SqlInjection/attack10").param("action_string", ""))

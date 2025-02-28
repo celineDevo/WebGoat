@@ -12,13 +12,13 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class Flags {
-  private final Map<Integer, Flag> FLAGS = new HashMap<>();
+  private final Map<Integer, Flag> flags = new HashMap<>();
 
   public Flags() {
-    IntStream.range(1, 10).forEach(i -> FLAGS.put(i, new Flag(i, UUID.randomUUID().toString())));
+    IntStream.range(1, 10).forEach(i -> flags.put(i, new Flag(i, UUID.randomUUID().toString())));
   }
 
   public Flag getFlag(int flagNumber) {
-    return FLAGS.get(flagNumber);
+    return flags.get(flagNumber);
   }
 }

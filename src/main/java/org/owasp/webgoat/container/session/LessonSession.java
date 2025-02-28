@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class LessonSession {
 
-  private Map<String, Object> userSessionData = new HashMap<>();
+  private final Map<String, Object> userSessionData = new HashMap<>();
 
   /** Default constructor initializing an empty session. */
   public LessonSession() {}

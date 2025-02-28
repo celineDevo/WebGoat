@@ -33,8 +33,8 @@ public abstract class IntegrationTest {
 
   protected class WebWolfUrlBuilder {
 
-    private boolean attackMode = false;
-    private String path = null;
+    private boolean attackMode;
+    private String path;
 
     protected String build() {
       return webWolfUrlConfig.url(path != null ? path : "");

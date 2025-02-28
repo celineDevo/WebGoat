@@ -159,7 +159,7 @@ public class LabelAndHintIntegrationTest extends IntegrationTest {
 
   private Properties getProperties(String lang) {
     Properties prop = null;
-    if (lang == null || lang.equals("")) {
+    if (lang == null || "".equals(lang)) {
       lang = "";
     } else {
       lang = "_" + lang;

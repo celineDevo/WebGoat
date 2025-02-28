@@ -75,9 +75,9 @@ public class ForgedReviews implements AssignmentEndpoint {
       String validateReq,
       HttpServletRequest request,
       @CurrentUsername String username) {
-    final String host = (request.getHeader("host") == null) ? "NULL" : request.getHeader("host");
+    final String host = request.getHeader("host") == null ? "NULL" : request.getHeader("host");
     final String referer =
-        (request.getHeader("referer") == null) ? "NULL" : request.getHeader("referer");
+        request.getHeader("referer") == null ? "NULL" : request.getHeader("referer");
     final String[] refererArr = referer.split("/");
 
     Review review = new Review();
@@ -89,11 +89,11 @@ public class ForgedReviews implements AssignmentEndpoint {
     reviews.add(review);
     userReviews.put(username, reviews);
     // short-circuit
-    if (validateReq == null || !validateReq.equals(weakAntiCSRF)) {
+    if (validateReq == null || !weakAntiCSRF.equals(validateReq)) {
       return failed(this).feedback("csrf-you-forgot-something").build();
     }
     // we have the spoofed files
-    if (referer != "NULL" && refererArr[2].equals(host)) {
+    if (!"NULL".equals(referer) && refererArr[2].equals(host)) {
       return failed(this).feedback("csrf-same-host").build();
     } else {
       return success(this)

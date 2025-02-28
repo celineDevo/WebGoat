@@ -14,7 +14,7 @@ public class AttackResultBuilder {
   private String output;
   private Object[] outputArgs;
   private AssignmentEndpoint assignment;
-  private boolean attemptWasMade = false;
+  private boolean attemptWasMade;
 
   public AttackResultBuilder lessonCompleted(boolean lessonCompleted) {
     this.lessonCompleted = lessonCompleted;

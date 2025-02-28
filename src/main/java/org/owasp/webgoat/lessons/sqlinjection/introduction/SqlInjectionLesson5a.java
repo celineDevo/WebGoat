@@ -116,6 +116,6 @@ public class SqlInjectionLesson5a implements AssignmentEndpoint {
     }
 
     t.append("</p>");
-    return (t.toString());
+    return t.toString();
   }
 }

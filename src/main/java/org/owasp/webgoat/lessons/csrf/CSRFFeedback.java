@@ -89,7 +89,7 @@ public class CSRFFeedback implements AssignmentEndpoint {
   private boolean requestContainsWebGoatCookie(Cookie[] cookies) {
     if (cookies != null) {
       for (Cookie c : cookies) {
-        if (c.getName().equals("JSESSIONID")) {
+        if ("JSESSIONID".equals(c.getName())) {
           return true;
         }
       }

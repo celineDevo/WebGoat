@@ -27,11 +27,11 @@ public class PasswordResetLessonIntegrationTest extends IntegrationTest {
   @TestFactory
   Iterable<DynamicTest> passwordResetLesson() {
     return Arrays.asList(
-        dynamicTest("assignment 6 - check email link", () -> sendEmailShouldBeAvailableInWebWolf()),
-        dynamicTest("assignment 6 - solve assignment", () -> solveAssignment()),
-        dynamicTest("assignment 2 - simple reset", () -> assignment2()),
-        dynamicTest("assignment 4 - guess questions", () -> assignment4()),
-        dynamicTest("assignment 5 - simple questions", () -> assignment5()));
+        dynamicTest("assignment 6 - check email link", this::sendEmailShouldBeAvailableInWebWolf),
+        dynamicTest("assignment 6 - solve assignment", this::solveAssignment),
+        dynamicTest("assignment 2 - simple reset", this::assignment2),
+        dynamicTest("assignment 4 - guess questions", this::assignment4),
+        dynamicTest("assignment 5 - simple questions", this::assignment5));
   }
 
   public void assignment2() {
@@ -130,11 +130,9 @@ public class PasswordResetLessonIntegrationTest extends IntegrationTest {
             .getBody()
             .asString();
     int startIndex = responseBody.lastIndexOf("/PasswordReset/reset/reset-password/");
-    var link =
-        responseBody.substring(
+    return responseBody.substring(
             startIndex + "/PasswordReset/reset/reset-password/".length(),
             responseBody.indexOf(",", startIndex) - 1);
-    return link;
   }
 
   private void clickForgotEmailLink(String user) {

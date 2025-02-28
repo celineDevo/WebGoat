@@ -15,7 +15,7 @@ import org.springframework.security.crypto.codec.Hex;
  *
  */
 
-public class EncDec {
+public final class EncDec {
 
   // PoC: weak encoding method
 

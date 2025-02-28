@@ -31,9 +31,8 @@ public class StartLesson {
         .filter(l -> l.getId().equals(lessonName))
         .findFirst()
         .ifPresent(
-            lesson -> {
-              request.setAttribute("lesson", lesson);
-            });
+            lesson ->
+              request.setAttribute("lesson", lesson));
 
     return model;
   }

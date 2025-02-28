@@ -32,7 +32,7 @@ public class Vote {
   private boolean votingAllowed = true;
 
   @JsonView(Views.UserView.class)
-  private long average = 0;
+  private long average;
 
   public Vote(
       String title,

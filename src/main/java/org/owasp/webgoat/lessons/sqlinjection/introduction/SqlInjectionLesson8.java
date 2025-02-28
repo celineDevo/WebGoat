@@ -107,7 +107,7 @@ public class SqlInjectionLesson8 implements AssignmentEndpoint {
     if (results.next()) {
       table.append("<tr>");
       for (int i = 1; i < (numColumns + 1); i++) {
-        table.append("<th>" + resultsMetaData.getColumnName(i) + "</th>");
+        table.append("<th>").append(resultsMetaData.getColumnName(i)).append("</th>");
       }
       table.append("</tr>");
 
@@ -115,7 +115,7 @@ public class SqlInjectionLesson8 implements AssignmentEndpoint {
       while (results.next()) {
         table.append("<tr>");
         for (int i = 1; i < (numColumns + 1); i++) {
-          table.append("<td>" + results.getString(i) + "</td>");
+          table.append("<td>").append(results.getString(i)).append("</td>");
         }
         table.append("</tr>");
       }
@@ -125,7 +125,7 @@ public class SqlInjectionLesson8 implements AssignmentEndpoint {
     }
 
     table.append("</table>");
-    return (table.toString());
+    return table.toString();
   }
 
   public static void log(Connection connection, String action) {

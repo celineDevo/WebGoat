@@ -86,7 +86,7 @@ public class FileServer {
   @GetMapping(value = "/files")
   public ModelAndView getFiles(
       HttpServletRequest request, Authentication authentication, TimeZone timezone) {
-    String username = (null != authentication) ? authentication.getName() : "anonymous";
+    String username = null != authentication ? authentication.getName() : "anonymous";
     File destinationDir = new File(fileLocation, username);
 
     ModelAndView modelAndView = new ModelAndView();

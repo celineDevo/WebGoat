@@ -155,8 +155,7 @@ public class JWTLessonIntegrationTest extends IntegrationTest {
         new String(Base64.getUrlEncoder().encode(headerNode.toString().getBytes()))
             .concat(".")
             .concat(
-                new String(Base64.getUrlEncoder().encode(bodyObject.toString().getBytes()))
-                    .toString())
+                new String(Base64.getUrlEncoder().encode(bodyObject.toString().getBytes())))
             .concat(".")
             .replace("=", "");
 
@@ -197,7 +196,7 @@ public class JWTLessonIntegrationTest extends IntegrationTest {
     String replacedToken =
         new String(Base64.getUrlEncoder().encode(headerNode.toString().getBytes()))
             .concat(".")
-            .concat(new String(Base64.getUrlEncoder().encode(body.getBytes())).toString())
+            .concat(new String(Base64.getUrlEncoder().encode(body.getBytes())))
             .concat(".")
             .replace("=", "");
 

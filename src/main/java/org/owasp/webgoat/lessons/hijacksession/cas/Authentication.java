@@ -16,7 +16,7 @@ import lombok.ToString;
 @ToString
 public class Authentication implements Principal {
 
-  private boolean authenticated = false;
+  private boolean authenticated;
   private String name;
   private Object credentials;
   private String id;

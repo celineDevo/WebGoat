@@ -14,7 +14,7 @@ import java.io.Serializable;
  */
 public class LabelDebugger implements Serializable {
 
-  private boolean enabled = false;
+  private boolean enabled;
 
   /**
    * isEnabled.

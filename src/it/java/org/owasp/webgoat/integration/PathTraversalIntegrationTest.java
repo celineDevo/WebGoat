@@ -31,7 +31,7 @@ class PathTraversalIT extends IntegrationTest {
 
   @TempDir Path tempDir;
 
-  private File fileToUpload = null;
+  private File fileToUpload;
 
   @BeforeEach
   @SneakyThrows
@@ -44,11 +44,11 @@ class PathTraversalIT extends IntegrationTest {
   @TestFactory
   Iterable<DynamicTest> testPathTraversal() {
     return Arrays.asList(
-        dynamicTest("assignment 1 - profile upload", () -> assignment1()),
-        dynamicTest("assignment 2 - profile upload fix", () -> assignment2()),
-        dynamicTest("assignment 3 - profile upload remove user input", () -> assignment3()),
-        dynamicTest("assignment 4 - profile upload random pic", () -> assignment4()),
-        dynamicTest("assignment 5 - zip slip", () -> assignment5()));
+        dynamicTest("assignment 1 - profile upload", this::assignment1),
+        dynamicTest("assignment 2 - profile upload fix", this::assignment2),
+        dynamicTest("assignment 3 - profile upload remove user input", this::assignment3),
+        dynamicTest("assignment 4 - profile upload random pic", this::assignment4),
+        dynamicTest("assignment 5 - zip slip", this::assignment5));
   }
 
   private void assignment1() throws IOException {

@@ -99,7 +99,7 @@ public class SqlInjectionLesson10 implements AssignmentEndpoint {
           connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
       ResultSet results = stmt.executeQuery("SELECT * FROM access_log");
       int cols = results.getMetaData().getColumnCount();
-      return (cols > 0);
+      return cols > 0;
     } catch (SQLException e) {
       String errorMsg = e.getMessage();
       if (errorMsg.contains("object not found: ACCESS_LOG")) {

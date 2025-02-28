@@ -21,23 +21,22 @@ public class ProgressRaceConditionIntegrationTest extends IntegrationTest {
 
   @Test
   public void runTests() throws InterruptedException {
-    int NUMBER_OF_CALLS = 40;
-    int NUMBER_OF_PARALLEL_THREADS = 5;
+    int numberOfCalls = 40;
+    int numberOfParallelThreads = 5;
     startLesson("Challenge1");
 
     Callable<Response> call =
-        () -> {
+        () ->
           // System.out.println("thread "+Thread.currentThread().getName());
-          return RestAssured.given()
+          RestAssured.given()
               .when()
               .relaxedHTTPSValidation()
               .cookie("JSESSIONID", getWebGoatCookie())
               .formParams(Map.of("flag", "test"))
               .post(url("challenge/flag/1"));
-        };
-    ExecutorService executorService = Executors.newFixedThreadPool(NUMBER_OF_PARALLEL_THREADS);
+    ExecutorService executorService = Executors.newFixedThreadPool(numberOfParallelThreads);
     List<? extends Callable<Response>> flagCalls =
-        IntStream.range(0, NUMBER_OF_CALLS).mapToObj(i -> call).collect(Collectors.toList());
+        IntStream.range(0, numberOfCalls).mapToObj(i -> call).collect(Collectors.toList());
     var responses = executorService.invokeAll(flagCalls);
 
     // A certain amount of parallel calls should fail as optimistic locking in DB is applied
@@ -56,6 +55,6 @@ public class ProgressRaceConditionIntegrationTest extends IntegrationTest {
             .count();
     System.err.println("counted status 500: " + countStatusCode500);
     Assertions.assertThat(countStatusCode500)
-        .isLessThanOrEqualTo((NUMBER_OF_CALLS - (NUMBER_OF_CALLS / NUMBER_OF_PARALLEL_THREADS)));
+        .isLessThanOrEqualTo((numberOfCalls - (numberOfCalls / numberOfParallelThreads)));
   }
 }

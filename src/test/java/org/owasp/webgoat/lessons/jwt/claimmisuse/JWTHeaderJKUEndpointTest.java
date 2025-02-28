@@ -78,13 +78,11 @@ class JWTHeaderJKUEndpointTest extends LessonTest {
   private String createTokenAndSignIt() {
     Map<String, Object> claims = new HashMap<>();
     claims.put("username", "Tom");
-    var token =
-        Jwts.builder()
+    return Jwts.builder()
             .setHeaderParam("jku", "http://localhost:%d/files/jwks".formatted(port))
             .setClaims(claims)
             .signWith(RS256, this.keyPair.getPrivate())
             .compact();
-    return token;
   }
 
   private void setupJsonWebKeySetInWebWolf() {

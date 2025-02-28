@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -44,7 +45,7 @@ public class WebSecurityConfig {
               auth.requestMatchers(HttpMethod.POST, "/files", "/mail", "/requests").permitAll();
               auth.anyRequest().authenticated();
             })
-        .csrf(csrf -> csrf.disable())
+        .csrf(AbstractHttpConfigurer::disable)
         .formLogin(
             login ->
                 login
@@ -55,9 +56,8 @@ public class WebSecurityConfig {
                     .passwordParameter("password")
                     .permitAll())
         .oauth2Login(
-            oidc -> {
-              oidc.defaultSuccessUrl("/home");
-            })
+            oidc ->
+              oidc.defaultSuccessUrl("/home"))
         .logout(logout -> logout.deleteCookies("WEBWOLFSESSION").invalidateHttpSession(true))
         .exceptionHandling(
             handling ->

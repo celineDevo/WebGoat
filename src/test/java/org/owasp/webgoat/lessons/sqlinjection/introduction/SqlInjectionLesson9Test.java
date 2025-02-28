@@ -33,7 +33,9 @@ public class SqlInjectionLesson9Test extends LessonTest {
           .andExpect(jsonPath("lessonCompleted", is(false)))
           .andExpect(jsonPath("$.output", containsString("feedback-negative")));
     } catch (AssertionError e) {
-      if (!e.getMessage().contains(completedError)) throw e;
+      if (!e.getMessage().contains(completedError)) {
+        throw e;
+      }
 
       mockMvc
           .perform(

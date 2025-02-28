@@ -30,15 +30,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AssignmentHints({
-  "jwt-kid-hint1",
-  "jwt-kid-hint2",
-  "jwt-kid-hint3",
-  "jwt-kid-hint4",
-  "jwt-kid-hint5",
-  "jwt-kid-hint6"
+    "jwt-kid-hint1",
+    "jwt-kid-hint2",
+    "jwt-kid-hint3",
+    "jwt-kid-hint4",
+    "jwt-kid-hint5",
+    "jwt-kid-hint6"
 })
 @RequestMapping("/JWT/")
-public class JWTHeaderKIDEndpoint implements AssignmentEndpoint {
+public final class JWTHeaderKIDEndpoint implements AssignmentEndpoint {
   private final LessonDataSource dataSource;
 
   private JWTHeaderKIDEndpoint(LessonDataSource dataSource) {

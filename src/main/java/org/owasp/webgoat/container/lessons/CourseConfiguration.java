@@ -33,12 +33,12 @@ public class CourseConfiguration {
       @Value("${server.servlet.context-path}") String contextPath) {
     this.lessons = lessons;
     this.assignments = assignments;
-    this.contextPath = contextPath.equals("/") ? "" : contextPath;
+    this.contextPath = "/".equals(contextPath) ? "" : contextPath;
   }
 
   private void attachToLessonInParentPackage(
       AssignmentEndpoint assignmentEndpoint, String packageName) {
-    if (packageName.equals("org.owasp.webgoat.lessons")) {
+    if ("org.owasp.webgoat.lessons".equals(packageName)) {
       throw new IllegalStateException(
           "No lesson found for assignment: '%s'"
               .formatted(assignmentEndpoint.getClass().getSimpleName()));
@@ -99,7 +99,7 @@ public class CourseConfiguration {
 
   private List<String> findDiff() {
     var matchedToLessons =
-        lessons.stream().flatMap(l -> l.getAssignments().stream()).map(a -> a.getName()).toList();
+        lessons.stream().flatMap(l -> l.getAssignments().stream()).map(Assignment::getName).toList();
     var allAssignments = assignments.stream().map(a -> a.getClass().getSimpleName()).toList();
 
     var diff = new ArrayList<>(allAssignments);

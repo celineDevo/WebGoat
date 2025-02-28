@@ -43,7 +43,9 @@ public class SqlInjectionLesson10b implements AssignmentEndpoint {
   @ResponseBody
   public AttackResult completed(@RequestParam String editor) {
     try {
-      if (editor.isEmpty()) return failed(this).feedback("sql-injection.10b.no-code").build();
+      if (editor.isEmpty()) {
+        return failed(this).feedback("sql-injection.10b.no-code").build();
+      }
 
       editor = editor.replaceAll("\\<.*?>", "");
 
@@ -56,24 +58,24 @@ public class SqlInjectionLesson10b implements AssignmentEndpoint {
 
       String codeline = editor.replace("\n", "").replace("\r", "");
 
-      boolean setsUpConnection = this.check_text(regexSetsUpConnection, codeline);
-      boolean usesPreparedStatement = this.check_text(regexUsesPreparedStatement, codeline);
-      boolean usesSetString = this.check_text(regexUsesSetString, codeline);
-      boolean usesPlaceholder = this.check_text(regexUsesPlaceholder, codeline);
-      boolean usesExecute = this.check_text(regexUsesExecute, codeline);
-      boolean usesExecuteUpdate = this.check_text(regexUsesExecuteUpdate, codeline);
+      boolean setsUpConnection = this.checkText(regexSetsUpConnection, codeline);
+      boolean usesPreparedStatement = this.checkText(regexUsesPreparedStatement, codeline);
+      boolean usesSetString = this.checkText(regexUsesSetString, codeline);
+      boolean usesPlaceholder = this.checkText(regexUsesPlaceholder, codeline);
+      boolean usesExecute = this.checkText(regexUsesExecute, codeline);
+      boolean usesExecuteUpdate = this.checkText(regexUsesExecuteUpdate, codeline);
 
       boolean hasImportant =
-          (setsUpConnection
+          setsUpConnection
               && usesPreparedStatement
               && usesPlaceholder
               && usesSetString
-              && (usesExecute || usesExecuteUpdate));
+              && (usesExecute || usesExecuteUpdate);
       List<Diagnostic> hasCompiled = this.compileFromString(editor);
 
-      if (hasImportant && hasCompiled.size() < 1) {
+      if (hasImportant && hasCompiled.isEmpty()) {
         return success(this).feedback("sql-injection.10b.success").build();
-      } else if (hasCompiled.size() > 0) {
+      } else if (!hasCompiled.isEmpty()) {
         String errors = "";
         for (Diagnostic d : hasCompiled) {
           errors += d.getMessage(null) + "<br>";
@@ -97,8 +99,7 @@ public class SqlInjectionLesson10b implements AssignmentEndpoint {
     JavaCompiler.CompilationTask task =
         compiler.getTask(null, fileManager, diagnosticsCollector, null, null, fileObjects);
     Boolean result = task.call();
-    List<Diagnostic> diagnostics = diagnosticsCollector.getDiagnostics();
-    return diagnostics;
+    return diagnosticsCollector.getDiagnostics();
   }
 
   private SimpleJavaFileObject getJavaFileContentsAsString(String s) {
@@ -118,7 +119,7 @@ public class SqlInjectionLesson10b implements AssignmentEndpoint {
   }
 
   class JavaObjectFromString extends SimpleJavaFileObject {
-    private String contents = null;
+    private String contents;
 
     public JavaObjectFromString(String className, String contents) throws Exception {
       super(new URI(className), Kind.SOURCE);
@@ -130,10 +131,9 @@ public class SqlInjectionLesson10b implements AssignmentEndpoint {
     }
   }
 
-  private boolean check_text(String regex, String text) {
+  private boolean checkText(String regex, String text) {
     Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
     Matcher m = p.matcher(text);
-    if (m.find()) return true;
-    else return false;
+    return m.find();
   }
 }

@@ -62,20 +62,20 @@ public class CryptoIntegrationTest extends IntegrationTest {
             .asString();
     basicEncoding = basicEncoding.substring("Authorization: Basic ".length());
     String decodedString = new String(Base64.getDecoder().decode(basicEncoding.getBytes()));
-    String answer_user = decodedString.split(":")[0];
-    String answer_pwd = decodedString.split(":")[1];
+    String answerUser = decodedString.split(":")[0];
+    String answerPwd = decodedString.split(":")[1];
     Map<String, Object> params = new HashMap<>();
     params.clear();
-    params.put("answer_user", answer_user);
-    params.put("answer_pwd", answer_pwd);
+    params.put("answer_user", answerUser);
+    params.put("answer_pwd", answerPwd);
     checkAssignment(url("crypto/encoding/basic-auth"), params, true);
   }
 
   private void checkAssignment3() {
-    String answer_1 = "databasepassword";
+    String answer1 = "databasepassword";
     Map<String, Object> params = new HashMap<>();
     params.clear();
-    params.put("answer_pwd1", answer_1);
+    params.put("answer_pwd1", answer1);
     checkAssignment(url("crypto/encoding/xor"), params, true);
   }
 
@@ -101,21 +101,21 @@ public class CryptoIntegrationTest extends IntegrationTest {
             .extract()
             .asString();
 
-    String answer_1 = "unknown";
-    String answer_2 = "unknown";
+    String answer1 = "unknown";
+    String answer2 = "unknown";
     for (String secret : HashingAssignment.SECRETS) {
       if (md5Hash.equals(HashingAssignment.getHash(secret, "MD5"))) {
-        answer_1 = secret;
+        answer1 = secret;
       }
       if (sha256Hash.equals(HashingAssignment.getHash(secret, "SHA-256"))) {
-        answer_2 = secret;
+        answer2 = secret;
       }
     }
 
     Map<String, Object> params = new HashMap<>();
     params.clear();
-    params.put("answer_pwd1", answer_1);
-    params.put("answer_pwd2", answer_2);
+    params.put("answer_pwd1", answer1);
+    params.put("answer_pwd2", answer2);
     checkAssignment(url("crypto/hashing"), params, true);
   }
 

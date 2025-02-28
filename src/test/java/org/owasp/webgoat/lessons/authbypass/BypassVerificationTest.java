@@ -11,7 +11,7 @@ class BypassVerificationTest extends LessonTest {
 
   @Test
   void placeHolder() {
-    assert (true);
+    assert true;
   }
 
   // TODO: Finish tests below ... getting null on injected/mocked userSession for some reason (in

@@ -24,7 +24,7 @@ public class WebWolfTraceRepository implements HttpExchangeRepository {
   private enum MatchingMode {
     CONTAINS,
     ENDS_WITH,
-    EQUALS;
+    EQUALS
   }
 
   record Exclusion(String path, MatchingMode mode) {
@@ -32,7 +32,7 @@ public class WebWolfTraceRepository implements HttpExchangeRepository {
       return switch (mode) {
         case CONTAINS -> path.contains(this.path);
         case ENDS_WITH -> path.endsWith(this.path);
-        case EQUALS -> path.equals(this.path);
+        case EQUALS -> true;
       };
     }
 

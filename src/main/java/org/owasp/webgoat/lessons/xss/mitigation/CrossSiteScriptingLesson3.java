@@ -32,11 +32,13 @@ public class CrossSiteScriptingLesson3 implements AssignmentEndpoint {
   public AttackResult completed(@RequestParam String editor) {
     String unescapedString = org.jsoup.parser.Parser.unescapeEntities(editor, true);
     try {
-      if (editor.isEmpty()) return failed(this).feedback("xss-mitigation-3-no-code").build();
+      if (editor.isEmpty()) {
+        return failed(this).feedback("xss-mitigation-3-no-code").build();
+      }
       Document doc = Jsoup.parse(unescapedString);
       String[] lines = unescapedString.split("<html>");
 
-      String include = (lines[0]);
+      String include = lines[0];
       String fistNameElement =
           doc.select("body > table > tbody > tr:nth-child(1) > td:nth-child(2)").first().text();
       String lastNameElement =
@@ -52,10 +54,10 @@ public class CrossSiteScriptingLesson3 implements AssignmentEndpoint {
           && include.contains("%>")) {
         includeCorrect = true;
       }
-      if (fistNameElement.equals("${e:forHtml(param.first_name)}")) {
+      if ("${e:forHtml(param.first_name)}".equals(fistNameElement)) {
         firstNameCorrect = true;
       }
-      if (lastNameElement.equals("${e:forHtml(param.last_name)}")) {
+      if ("${e:forHtml(param.last_name)}".equals(lastNameElement)) {
         lastNameCorrect = true;
       }
 
