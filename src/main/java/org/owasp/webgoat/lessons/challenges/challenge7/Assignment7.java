@@ -1,3 +1,7 @@
+/*
+ * SPDX-FileCopyrightText: Copyright © 2017 WebGoat authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
 package org.owasp.webgoat.lessons.challenges.challenge7;
 
 import static org.owasp.webgoat.container.assignments.AttackResultBuilder.success;
@@ -59,7 +63,7 @@ public class Assignment7 implements AssignmentEndpoint {
 
   @GetMapping("/challenge/7/reset-password/{link}")
   public ResponseEntity<String> resetPassword(@PathVariable(value = "link") String link) {
-    if (link.equals(ADMIN_PASSWORD_LINK)) {
+    if (ADMIN_PASSWORD_LINK.equals(link)) {
       return ResponseEntity.accepted()
           .body(
               "<h1>Success!!</h1>"

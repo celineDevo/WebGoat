@@ -1,3 +1,7 @@
+/*
+ * SPDX-FileCopyrightText: Copyright © 2017 WebGoat authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
 package org.owasp.webgoat.lessons.challenges.challenge8;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,7 +43,7 @@ public class Assignment8 implements AssignmentEndpoint {
       @PathVariable(value = "stars") int nrOfStars, HttpServletRequest request) {
     // Simple implementation of VERB Based Authentication
     String msg = "";
-    if (request.getMethod().equals("GET")) {
+    if ("GET".equals(request.getMethod())) {
       var json =
           Map.of("error", true, "message", "Sorry but you need to login first in order to vote");
       return ResponseEntity.status(200).body(json);
@@ -55,12 +59,12 @@ public class Assignment8 implements AssignmentEndpoint {
   public ResponseEntity<?> getVotes() {
     return ResponseEntity.ok(
         votes.entrySet().stream()
-            .collect(Collectors.toMap(e -> "" + e.getKey(), e -> e.getValue())));
+            .collect(Collectors.toMap(e -> "" + e.getKey(), Map.Entry::getValue)));
   }
 
   @GetMapping("/challenge/8/votes/average")
   public ResponseEntity<Map<String, Integer>> average() {
-    int totalNumberOfVotes = votes.values().stream().mapToInt(i -> i.intValue()).sum();
+    int totalNumberOfVotes = votes.values().stream().mapToInt(Integer::intValue).sum();
     int categories =
         votes.entrySet().stream()
             .mapToInt(e -> e.getKey() * e.getValue())

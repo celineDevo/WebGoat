@@ -1,3 +1,7 @@
+/*
+ * SPDX-FileCopyrightText: Copyright © 2018 WebGoat authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
 package org.owasp.webgoat.container.asciidoc;
 
 import java.util.HashMap;
@@ -42,6 +46,6 @@ public class WebWolfMacro extends InlineMacroProcessor {
   }
 
   private boolean displayCompleteLinkNoFormatting(Map<String, Object> attributes) {
-    return attributes.values().stream().anyMatch(a -> a.equals("noLink"));
+    return attributes.values().stream().anyMatch("noLink"::equals);
   }
 }

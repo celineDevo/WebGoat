@@ -1,3 +1,7 @@
+/*
+ * SPDX-FileCopyrightText: Copyright © 2023 WebGoat authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
 package org.owasp.webgoat.lessons.challenges;
 
 import java.util.HashMap;
@@ -8,13 +12,13 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class Flags {
-  private final Map<Integer, Flag> FLAGS = new HashMap<>();
+  private final Map<Integer, Flag> flags = new HashMap<>();
 
   public Flags() {
-    IntStream.range(1, 10).forEach(i -> FLAGS.put(i, new Flag(i, UUID.randomUUID().toString())));
+    IntStream.range(1, 10).forEach(i -> flags.put(i, new Flag(i, UUID.randomUUID().toString())));
   }
 
   public Flag getFlag(int flagNumber) {
-    return FLAGS.get(flagNumber);
+    return flags.get(flagNumber);
   }
 }

@@ -1,23 +1,6 @@
 /*
- * This file is part of WebGoat, an Open Web Application Security Project utility. For details, please see http://www.owasp.org/
- *
- * Copyright (c) 2002 - 2019 Bruce Mayhew
- *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with this program; if
- * not, write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
- * 02111-1307, USA.
- *
- * Getting Source ==============
- *
- * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
+ * SPDX-FileCopyrightText: Copyright © 2016 WebGoat authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 package org.owasp.webgoat.webwolf;
 
@@ -33,6 +16,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -61,7 +45,7 @@ public class WebSecurityConfig {
               auth.requestMatchers(HttpMethod.POST, "/files", "/mail", "/requests").permitAll();
               auth.anyRequest().authenticated();
             })
-        .csrf(csrf -> csrf.disable())
+        .csrf(AbstractHttpConfigurer::disable)
         .formLogin(
             login ->
                 login
@@ -72,9 +56,8 @@ public class WebSecurityConfig {
                     .passwordParameter("password")
                     .permitAll())
         .oauth2Login(
-            oidc -> {
-              oidc.defaultSuccessUrl("/home");
-            })
+            oidc ->
+              oidc.defaultSuccessUrl("/home"))
         .logout(logout -> logout.deleteCookies("WEBWOLFSESSION").invalidateHttpSession(true))
         .exceptionHandling(
             handling ->

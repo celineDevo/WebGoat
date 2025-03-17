@@ -1,3 +1,7 @@
+/*
+ * SPDX-FileCopyrightText: Copyright © 2023 WebGoat authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
 package org.owasp.webgoat.container;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 public class UserInterceptor implements HandlerInterceptor {
 
-  private Environment env = EnvironmentExposure.getEnv();
+  private final Environment env = EnvironmentExposure.getEnv();
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -35,7 +39,7 @@ public class UserInterceptor implements HandlerInterceptor {
       if (null != env) {
         String githubClientId =
             env.getProperty("spring.security.oauth2.client.registration.github.client-id");
-        if (null != githubClientId && !githubClientId.equals("dummy")) {
+        if (null != githubClientId && !"dummy".equals(githubClientId)) {
           modelAndView.getModel().put("oauth", Boolean.TRUE);
         }
       } else {

@@ -1,3 +1,7 @@
+/*
+ * SPDX-FileCopyrightText: Copyright © 2019 WebGoat authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
 package org.owasp.webgoat.lessons.deserialization;
 
 import static org.hamcrest.Matchers.is;
@@ -12,11 +16,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 class DeserializeTest extends LessonTest {
 
-  private static String OS = System.getProperty("os.name").toLowerCase();
+  private static final String OS = System.getProperty("os.name").toLowerCase();
 
   @Test
   void success() throws Exception {
-    if (OS.indexOf("win") > -1) {
+    if (OS.contains("win")) {
       mockMvc
           .perform(
               MockMvcRequestBuilders.post("/InsecureDeserialization/task")

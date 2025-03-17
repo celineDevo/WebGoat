@@ -1,3 +1,7 @@
+/*
+ * SPDX-FileCopyrightText: Copyright © 2017 WebGoat authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
 package org.owasp.webgoat.lessons.challenges.challenge7;
 
 import java.io.File;
@@ -65,9 +69,9 @@ public class MD5 {
       finalState.copy(workingState);
       long bitCount = finalState.bitCount;
       // Compute the number of left over bits
-      int leftOver = (int) (((bitCount >>> 3)) & 0x3f);
+      int leftOver = (int) ((bitCount >>> 3) & 0x3f);
       // Compute the amount of padding to add based on number of left over bits.
-      int padlen = (leftOver < 56) ? (56 - leftOver) : (120 - leftOver);
+      int padlen = leftOver < 56 ? (56 - leftOver) : (120 - leftOver);
       // add the padding
       update(finalState, padding, 0, padlen);
       // add the length (computed before padding was added)
@@ -275,7 +279,7 @@ public class MD5 {
    * @param length number of bytes to hash.
    * @since ostermillerutils 1.00.00
    */
-  private void update(MD5State state, byte buffer[], int offset, int length) {
+  private void update(MD5State state, byte[] buffer, int offset, int length) {
 
     finalState.valid = false;
 
@@ -322,7 +326,7 @@ public class MD5 {
    * @param length number of bytes to hash.
    * @since ostermillerutils 1.00.00
    */
-  public void update(byte buffer[], int offset, int length) {
+  public void update(byte[] buffer, int offset, int length) {
     update(workingState, buffer, offset, length);
   }
 
@@ -335,7 +339,7 @@ public class MD5 {
    * @param length number of bytes to hash.
    * @since ostermillerutils 1.00.00
    */
-  public void update(byte buffer[], int length) {
+  public void update(byte[] buffer, int length) {
     update(buffer, 0, length);
   }
 
@@ -345,7 +349,7 @@ public class MD5 {
    * @param buffer Array of bytes to be hashed.
    * @since ostermillerutils 1.00.00
    */
-  public void update(byte buffer[]) {
+  public void update(byte[] buffer) {
     update(buffer, 0, buffer.length);
   }
 
@@ -356,7 +360,7 @@ public class MD5 {
    * @since ostermillerutils 1.00.00
    */
   public void update(byte b) {
-    byte buffer[] = new byte[1];
+    byte[] buffer = new byte[1];
     buffer[0] = b;
     update(buffer, 1);
   }
@@ -389,7 +393,7 @@ public class MD5 {
    *
    * @since ostermillerutils 1.00.00
    */
-  private MD5State workingState = new MD5State();
+  private final MD5State workingState = new MD5State();
 
   /**
    * Cached copy of the final MD5 hash sum. This is created when the hash is requested and it is
@@ -397,21 +401,21 @@ public class MD5 {
    *
    * @since ostermillerutils 1.00.00
    */
-  private MD5State finalState = new MD5State();
+  private final MD5State finalState = new MD5State();
 
   /**
    * Temporary buffer cached here for performance reasons.
    *
    * @since ostermillerutils 1.00.00
    */
-  private int[] decodeBuffer = new int[16];
+  private final int[] decodeBuffer = new int[16];
 
   /**
    * 64 bytes of padding that can be added if the length is not divisible by 64.
    *
    * @since ostermillerutils 1.00.00
    */
-  private static final byte padding[] = {
+  private static final byte[] padding = {
     (byte) 0x80,
     0,
     0,
@@ -483,7 +487,7 @@ public class MD5 {
    *
    * @since ostermillerutils 1.00.00
    */
-  private class MD5State {
+  private final class MD5State {
 
     /**
      * True if this state is valid.
@@ -511,7 +515,7 @@ public class MD5 {
      *
      * @since ostermillerutils 1.00.00
      */
-    private int state[] = new int[4];
+    private int[] state = new int[4];
 
     /**
      * 64-bit count of the number of bits that have been hashed.
@@ -525,7 +529,7 @@ public class MD5 {
      *
      * @since ostermillerutils 1.00.00
      */
-    private byte buffer[] = new byte[64];
+    private byte[] buffer = new byte[64];
 
     private MD5State() {
       reset();
@@ -552,7 +556,7 @@ public class MD5 {
    * @return Generated hex string
    * @since ostermillerutils 1.00.00
    */
-  private static String toHex(byte hash[]) {
+  private static String toHex(byte[] hash) {
     StringBuilder buf = new StringBuilder(hash.length * 2);
     for (byte element : hash) {
       int intVal = element & 0xff;
@@ -566,8 +570,8 @@ public class MD5 {
     return buf.toString();
   }
 
-  private static int FF(int a, int b, int c, int d, int x, int s, int ac) {
-    a += ((b & c) | (~b & d));
+  private static int fF(int a, int b, int c, int d, int x, int s, int ac) {
+    a += (b & c) | (~b & d);
     a += x;
     a += ac;
     // return rotateLeft(a, s) + b;
@@ -575,8 +579,8 @@ public class MD5 {
     return a + b;
   }
 
-  private static int GG(int a, int b, int c, int d, int x, int s, int ac) {
-    a += ((b & d) | (c & ~d));
+  private static int gG(int a, int b, int c, int d, int x, int s, int ac) {
+    a += (b & d) | (c & ~d);
     a += x;
     a += ac;
     // return rotateLeft(a, s) + b;
@@ -584,8 +588,8 @@ public class MD5 {
     return a + b;
   }
 
-  private static int HH(int a, int b, int c, int d, int x, int s, int ac) {
-    a += (b ^ c ^ d);
+  private static int hH(int a, int b, int c, int d, int x, int s, int ac) {
+    a += b ^ c ^ d;
     a += x;
     a += ac;
     // return rotateLeft(a, s) + b;
@@ -593,8 +597,8 @@ public class MD5 {
     return a + b;
   }
 
-  private static int II(int a, int b, int c, int d, int x, int s, int ac) {
-    a += (c ^ (b | ~d));
+  private static int iI(int a, int b, int c, int d, int x, int s, int ac) {
+    a += c ^ (b | ~d);
     a += x;
     a += ac;
     // return rotateLeft(a, s) + b;
@@ -615,9 +619,10 @@ public class MD5 {
     return out;
   }
 
-  private static byte[] encode(int input[], int len) {
+  private static byte[] encode(int[] input, int len) {
     byte[] out = new byte[len];
-    int i, j;
+    int i;
+    int j;
     for (i = j = 0; j < len; i++, j += 4) {
       out[j] = (byte) (input[i] & 0xff);
       out[j + 1] = (byte) ((input[i] >>> 8) & 0xff);
@@ -627,14 +632,15 @@ public class MD5 {
     return out;
   }
 
-  private int[] decode(byte buffer[], int len, int offset) {
-    int i, j;
+  private int[] decode(byte[] buffer, int len, int offset) {
+    int i;
+    int j;
     for (i = j = 0; j < len; i++, j += 4) {
       decodeBuffer[i] =
-          ((buffer[j + offset] & 0xff))
-              | (((buffer[j + 1 + offset] & 0xff)) << 8)
-              | (((buffer[j + 2 + offset] & 0xff)) << 16)
-              | (((buffer[j + 3 + offset] & 0xff)) << 24);
+          (buffer[j + offset] & 0xff)
+              | ((buffer[j + 1 + offset] & 0xff) << 8)
+              | ((buffer[j + 2 + offset] & 0xff) << 16)
+              | ((buffer[j + 3 + offset] & 0xff) << 24);
     }
     return decodeBuffer;
   }
@@ -646,76 +652,76 @@ public class MD5 {
     int d = state.state[3];
 
     /* Round 1 */
-    a = FF(a, b, c, d, x[0], 7, 0xd76aa478); /* 1 */
-    d = FF(d, a, b, c, x[1], 12, 0xe8c7b756); /* 2 */
-    c = FF(c, d, a, b, x[2], 17, 0x242070db); /* 3 */
-    b = FF(b, c, d, a, x[3], 22, 0xc1bdceee); /* 4 */
-    a = FF(a, b, c, d, x[4], 7, 0xf57c0faf); /* 5 */
-    d = FF(d, a, b, c, x[5], 12, 0x4787c62a); /* 6 */
-    c = FF(c, d, a, b, x[6], 17, 0xa8304613); /* 7 */
-    b = FF(b, c, d, a, x[7], 22, 0xfd469501); /* 8 */
-    a = FF(a, b, c, d, x[8], 7, 0x698098d8); /* 9 */
-    d = FF(d, a, b, c, x[9], 12, 0x8b44f7af); /* 10 */
-    c = FF(c, d, a, b, x[10], 17, 0xffff5bb1); /* 11 */
-    b = FF(b, c, d, a, x[11], 22, 0x895cd7be); /* 12 */
-    a = FF(a, b, c, d, x[12], 7, 0x6b901122); /* 13 */
-    d = FF(d, a, b, c, x[13], 12, 0xfd987193); /* 14 */
-    c = FF(c, d, a, b, x[14], 17, 0xa679438e); /* 15 */
-    b = FF(b, c, d, a, x[15], 22, 0x49b40821); /* 16 */
+    a = fF(a, b, c, d, x[0], 7, 0xd76aa478); /* 1 */
+    d = fF(d, a, b, c, x[1], 12, 0xe8c7b756); /* 2 */
+    c = fF(c, d, a, b, x[2], 17, 0x242070db); /* 3 */
+    b = fF(b, c, d, a, x[3], 22, 0xc1bdceee); /* 4 */
+    a = fF(a, b, c, d, x[4], 7, 0xf57c0faf); /* 5 */
+    d = fF(d, a, b, c, x[5], 12, 0x4787c62a); /* 6 */
+    c = fF(c, d, a, b, x[6], 17, 0xa8304613); /* 7 */
+    b = fF(b, c, d, a, x[7], 22, 0xfd469501); /* 8 */
+    a = fF(a, b, c, d, x[8], 7, 0x698098d8); /* 9 */
+    d = fF(d, a, b, c, x[9], 12, 0x8b44f7af); /* 10 */
+    c = fF(c, d, a, b, x[10], 17, 0xffff5bb1); /* 11 */
+    b = fF(b, c, d, a, x[11], 22, 0x895cd7be); /* 12 */
+    a = fF(a, b, c, d, x[12], 7, 0x6b901122); /* 13 */
+    d = fF(d, a, b, c, x[13], 12, 0xfd987193); /* 14 */
+    c = fF(c, d, a, b, x[14], 17, 0xa679438e); /* 15 */
+    b = fF(b, c, d, a, x[15], 22, 0x49b40821); /* 16 */
 
     /* Round 2 */
-    a = GG(a, b, c, d, x[1], 5, 0xf61e2562); /* 17 */
-    d = GG(d, a, b, c, x[6], 9, 0xc040b340); /* 18 */
-    c = GG(c, d, a, b, x[11], 14, 0x265e5a51); /* 19 */
-    b = GG(b, c, d, a, x[0], 20, 0xe9b6c7aa); /* 20 */
-    a = GG(a, b, c, d, x[5], 5, 0xd62f105d); /* 21 */
-    d = GG(d, a, b, c, x[10], 9, 0x02441453); /* 22 */
-    c = GG(c, d, a, b, x[15], 14, 0xd8a1e681); /* 23 */
-    b = GG(b, c, d, a, x[4], 20, 0xe7d3fbc8); /* 24 */
-    a = GG(a, b, c, d, x[9], 5, 0x21e1cde6); /* 25 */
-    d = GG(d, a, b, c, x[14], 9, 0xc33707d6); /* 26 */
-    c = GG(c, d, a, b, x[3], 14, 0xf4d50d87); /* 27 */
-    b = GG(b, c, d, a, x[8], 20, 0x455a14ed); /* 28 */
-    a = GG(a, b, c, d, x[13], 5, 0xa9e3e905); /* 29 */
-    d = GG(d, a, b, c, x[2], 9, 0xfcefa3f8); /* 30 */
-    c = GG(c, d, a, b, x[7], 14, 0x676f02d9); /* 31 */
-    b = GG(b, c, d, a, x[12], 20, 0x8d2a4c8a); /* 32 */
+    a = gG(a, b, c, d, x[1], 5, 0xf61e2562); /* 17 */
+    d = gG(d, a, b, c, x[6], 9, 0xc040b340); /* 18 */
+    c = gG(c, d, a, b, x[11], 14, 0x265e5a51); /* 19 */
+    b = gG(b, c, d, a, x[0], 20, 0xe9b6c7aa); /* 20 */
+    a = gG(a, b, c, d, x[5], 5, 0xd62f105d); /* 21 */
+    d = gG(d, a, b, c, x[10], 9, 0x02441453); /* 22 */
+    c = gG(c, d, a, b, x[15], 14, 0xd8a1e681); /* 23 */
+    b = gG(b, c, d, a, x[4], 20, 0xe7d3fbc8); /* 24 */
+    a = gG(a, b, c, d, x[9], 5, 0x21e1cde6); /* 25 */
+    d = gG(d, a, b, c, x[14], 9, 0xc33707d6); /* 26 */
+    c = gG(c, d, a, b, x[3], 14, 0xf4d50d87); /* 27 */
+    b = gG(b, c, d, a, x[8], 20, 0x455a14ed); /* 28 */
+    a = gG(a, b, c, d, x[13], 5, 0xa9e3e905); /* 29 */
+    d = gG(d, a, b, c, x[2], 9, 0xfcefa3f8); /* 30 */
+    c = gG(c, d, a, b, x[7], 14, 0x676f02d9); /* 31 */
+    b = gG(b, c, d, a, x[12], 20, 0x8d2a4c8a); /* 32 */
 
     /* Round 3 */
-    a = HH(a, b, c, d, x[5], 4, 0xfffa3942); /* 33 */
-    d = HH(d, a, b, c, x[8], 11, 0x8771f681); /* 34 */
-    c = HH(c, d, a, b, x[11], 16, 0x6d9d6122); /* 35 */
-    b = HH(b, c, d, a, x[14], 23, 0xfde5380c); /* 36 */
-    a = HH(a, b, c, d, x[1], 4, 0xa4beea44); /* 37 */
-    d = HH(d, a, b, c, x[4], 11, 0x4bdecfa9); /* 38 */
-    c = HH(c, d, a, b, x[7], 16, 0xf6bb4b60); /* 39 */
-    b = HH(b, c, d, a, x[10], 23, 0xbebfbc70); /* 40 */
-    a = HH(a, b, c, d, x[13], 4, 0x289b7ec6); /* 41 */
-    d = HH(d, a, b, c, x[0], 11, 0xeaa127fa); /* 42 */
-    c = HH(c, d, a, b, x[3], 16, 0xd4ef3085); /* 43 */
-    b = HH(b, c, d, a, x[6], 23, 0x04881d05); /* 44 */
-    a = HH(a, b, c, d, x[9], 4, 0xd9d4d039); /* 45 */
-    d = HH(d, a, b, c, x[12], 11, 0xe6db99e5); /* 46 */
-    c = HH(c, d, a, b, x[15], 16, 0x1fa27cf8); /* 47 */
-    b = HH(b, c, d, a, x[2], 23, 0xc4ac5665); /* 48 */
+    a = hH(a, b, c, d, x[5], 4, 0xfffa3942); /* 33 */
+    d = hH(d, a, b, c, x[8], 11, 0x8771f681); /* 34 */
+    c = hH(c, d, a, b, x[11], 16, 0x6d9d6122); /* 35 */
+    b = hH(b, c, d, a, x[14], 23, 0xfde5380c); /* 36 */
+    a = hH(a, b, c, d, x[1], 4, 0xa4beea44); /* 37 */
+    d = hH(d, a, b, c, x[4], 11, 0x4bdecfa9); /* 38 */
+    c = hH(c, d, a, b, x[7], 16, 0xf6bb4b60); /* 39 */
+    b = hH(b, c, d, a, x[10], 23, 0xbebfbc70); /* 40 */
+    a = hH(a, b, c, d, x[13], 4, 0x289b7ec6); /* 41 */
+    d = hH(d, a, b, c, x[0], 11, 0xeaa127fa); /* 42 */
+    c = hH(c, d, a, b, x[3], 16, 0xd4ef3085); /* 43 */
+    b = hH(b, c, d, a, x[6], 23, 0x04881d05); /* 44 */
+    a = hH(a, b, c, d, x[9], 4, 0xd9d4d039); /* 45 */
+    d = hH(d, a, b, c, x[12], 11, 0xe6db99e5); /* 46 */
+    c = hH(c, d, a, b, x[15], 16, 0x1fa27cf8); /* 47 */
+    b = hH(b, c, d, a, x[2], 23, 0xc4ac5665); /* 48 */
 
     /* Round 4 */
-    a = II(a, b, c, d, x[0], 6, 0xf4292244); /* 49 */
-    d = II(d, a, b, c, x[7], 10, 0x432aff97); /* 50 */
-    c = II(c, d, a, b, x[14], 15, 0xab9423a7); /* 51 */
-    b = II(b, c, d, a, x[5], 21, 0xfc93a039); /* 52 */
-    a = II(a, b, c, d, x[12], 6, 0x655b59c3); /* 53 */
-    d = II(d, a, b, c, x[3], 10, 0x8f0ccc92); /* 54 */
-    c = II(c, d, a, b, x[10], 15, 0xffeff47d); /* 55 */
-    b = II(b, c, d, a, x[1], 21, 0x85845dd1); /* 56 */
-    a = II(a, b, c, d, x[8], 6, 0x6fa87e4f); /* 57 */
-    d = II(d, a, b, c, x[15], 10, 0xfe2ce6e0); /* 58 */
-    c = II(c, d, a, b, x[6], 15, 0xa3014314); /* 59 */
-    b = II(b, c, d, a, x[13], 21, 0x4e0811a1); /* 60 */
-    a = II(a, b, c, d, x[4], 6, 0xf7537e82); /* 61 */
-    d = II(d, a, b, c, x[11], 10, 0xbd3af235); /* 62 */
-    c = II(c, d, a, b, x[2], 15, 0x2ad7d2bb); /* 63 */
-    b = II(b, c, d, a, x[9], 21, 0xeb86d391); /* 64 */
+    a = iI(a, b, c, d, x[0], 6, 0xf4292244); /* 49 */
+    d = iI(d, a, b, c, x[7], 10, 0x432aff97); /* 50 */
+    c = iI(c, d, a, b, x[14], 15, 0xab9423a7); /* 51 */
+    b = iI(b, c, d, a, x[5], 21, 0xfc93a039); /* 52 */
+    a = iI(a, b, c, d, x[12], 6, 0x655b59c3); /* 53 */
+    d = iI(d, a, b, c, x[3], 10, 0x8f0ccc92); /* 54 */
+    c = iI(c, d, a, b, x[10], 15, 0xffeff47d); /* 55 */
+    b = iI(b, c, d, a, x[1], 21, 0x85845dd1); /* 56 */
+    a = iI(a, b, c, d, x[8], 6, 0x6fa87e4f); /* 57 */
+    d = iI(d, a, b, c, x[15], 10, 0xfe2ce6e0); /* 58 */
+    c = iI(c, d, a, b, x[6], 15, 0xa3014314); /* 59 */
+    b = iI(b, c, d, a, x[13], 21, 0x4e0811a1); /* 60 */
+    a = iI(a, b, c, d, x[4], 6, 0xf7537e82); /* 61 */
+    d = iI(d, a, b, c, x[11], 10, 0xbd3af235); /* 62 */
+    c = iI(c, d, a, b, x[2], 15, 0x2ad7d2bb); /* 63 */
+    b = iI(b, c, d, a, x[9], 21, 0xeb86d391); /* 64 */
 
     state.state[0] += a;
     state.state[1] += b;

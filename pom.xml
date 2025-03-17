@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.4.1</version>
+    <version>3.4.3</version>
   </parent>
 
   <groupId>org.owasp.webgoat</groupId>
@@ -74,21 +74,21 @@
     <commons-text.version>1.13.0</commons-text.version>
     <guava.version>33.4.0-jre</guava.version>
     <jacoco.version>0.8.11</jacoco.version>
-    <java.version>23</java.version>
+    <java.version>21</java.version>
     <jaxb.version>2.3.1</jaxb.version>
     <jjwt.version>0.9.1</jjwt.version>
     <jose4j.version>0.9.6.redhat-00001</jose4j.version>
     <jquery.version>3.7.1</jquery.version>
     <jsoup.version>1.18.3</jsoup.version>
     <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
-    <maven-failsafe-plugin.version>2.22.0</maven-failsafe-plugin.version>
+    <maven-failsafe-plugin.version>3.5.2</maven-failsafe-plugin.version>
     <maven-jar-plugin.version>3.1.2</maven-jar-plugin.version>
     <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
     <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
     <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
     <maven.compiler.proc>full</maven.compiler.proc>
-    <maven.compiler.source>23</maven.compiler.source>
-    <maven.compiler.target>23</maven.compiler.target>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
 
     <pmd.version>3.15.0</pmd.version>
     <!-- Use UTF-8 Encoding -->
@@ -96,12 +96,14 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <thymeleaf.version>3.1.2.RELEASE</thymeleaf.version>
     <waittimeForServerStart>60</waittimeForServerStart>
-    <webdriver.version>5.9.2</webdriver.version>
-    <webgoat.context>/</webgoat.context>
+    <webdriver.version>5.9.3</webdriver.version>
+    <webgoat.context>/WebGoat</webgoat.context>
+    <webgoat.port>8080</webgoat.port>
     <webgoat.sslenabled>false</webgoat.sslenabled>
     <webjars-locator-core.version>0.59</webjars-locator-core.version>
-    <webwolf.context>/</webwolf.context>
-    <wiremock.version>3.10.0</wiremock.version>
+    <webwolf.context>/WebWolf</webwolf.context>
+    <webwolf.port>9090</webwolf.port>
+    <wiremock.version>3.11.0</wiremock.version>
     <xml-resolver.version>1.2</xml-resolver.version>
     <xstream.version>1.4.21.redhat-00001</xstream.version>
     <!-- do not update necessary for lesson -->
@@ -160,7 +162,7 @@
       <dependency>
         <groupId>com.auth0</groupId>
         <artifactId>java-jwt</artifactId>
-        <version>4.4.0</version>
+        <version>4.5.0</version>
       </dependency>
       <dependency>
         <groupId>com.google.guava</groupId>
@@ -215,7 +217,12 @@
       <dependency>
         <groupId>org.jruby</groupId>
         <artifactId>jruby</artifactId>
-        <version>9.4.9.0</version>
+        <version>9.4.12.0</version>
+      </dependency>
+      <dependency>
+        <groupId>com.microsoft.playwright</groupId>
+        <artifactId>playwright</artifactId>
+        <version>1.50.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -238,13 +245,13 @@
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>testcontainers</artifactId>
-      <version>1.20.4</version>
+      <version>1.20.5</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>1.20.4</version>
+      <version>1.20.5</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -401,6 +408,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>com.microsoft.playwright</groupId>
+      <artifactId>playwright</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-properties-migrator</artifactId>
       <scope>runtime</scope>
@@ -428,6 +440,24 @@
 
   <build>
     <plugins>
+    <plugin>
+        <groupId>org.openrewrite.maven</groupId>
+        <artifactId>rewrite-maven-plugin</artifactId>
+        <version>6.2.1</version>
+        <configuration>
+          <exportDatatables>true</exportDatatables>
+          <activeRecipes>
+            <recipe>org.openrewrite.staticanalysis.CommonStaticAnalysis</recipe>
+          </activeRecipes>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.openrewrite.recipe</groupId>
+            <artifactId>rewrite-static-analysis</artifactId>
+            <version>2.3.0</version>
+          </dependency>
+        </dependencies>
+      </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
@@ -486,7 +516,7 @@
             <logback.configurationFile>${basedir}/src/test/resources/logback-test.xml</logback.configurationFile>
           </systemPropertyVariables>
           <argLine>-Xmx512m</argLine>
-          <includes>org/owasp/webgoat/*Test</includes>
+          <includes>org/owasp/webgoat/integration/*Test, org/owasp/webgoat/playwright/**/*Test</includes>
         </configuration>
         <executions>
           <execution>
@@ -517,6 +547,7 @@
           --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED</argLine>
           <excludes>
             <exclude>**/*IntegrationTest.java</exclude>
+            <exclude>**/*UITest.java</exclude>
           </excludes>
         </configuration>
       </plugin>
@@ -535,9 +566,18 @@
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
-        <version>2.41.1</version>
+        <version>2.44.3</version>
         <configuration>
           <formats>
+            <format>
+              <includes>
+                <include>src/**/*.java</include>
+              </includes>
+              <licenseHeader>
+                <file>${project.basedir}/config/license-headers/java</file>
+                <delimiter>(package|import)</delimiter>
+              </licenseHeader>
+            </format>
             <format>
               <includes>
                 <include>.gitignore</include>
@@ -702,7 +742,7 @@
                   </arguments>
                   <waitForInterrupt>false</waitForInterrupt>
                   <waitAfterLaunch>${waittimeForServerStart}</waitAfterLaunch>
-                  <healthCheckUrl>http://127.0.0.1:${webgoat.port}${webgoat.context}login</healthCheckUrl>
+                  <healthCheckUrl>http://127.0.0.1:${webgoat.port}${webgoat.context}/login</healthCheckUrl>
                 </configuration>
               </execution>
               <execution>

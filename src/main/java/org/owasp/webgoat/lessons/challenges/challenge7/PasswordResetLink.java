@@ -1,3 +1,7 @@
+/*
+ * SPDX-FileCopyrightText: Copyright © 2017 WebGoat authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
 package org.owasp.webgoat.lessons.challenges.challenge7;
 
 import java.util.Random;
@@ -12,7 +16,7 @@ public class PasswordResetLink {
 
   public String createPasswordReset(String username, String key) {
     Random random = new Random();
-    if (username.equalsIgnoreCase("admin")) {
+    if ("admin".equalsIgnoreCase(username)) {
       // Admin has a fix reset link
       random.setSeed(key.length());
     }

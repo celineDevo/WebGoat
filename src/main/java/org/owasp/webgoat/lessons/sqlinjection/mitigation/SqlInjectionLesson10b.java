@@ -1,25 +1,7 @@
 /*
- * This file is part of WebGoat, an Open Web Application Security Project utility. For details, please see http://www.owasp.org/
- *
- * Copyright (c) 2002 - 2019 Bruce Mayhew
- *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with this program; if
- * not, write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
- * 02111-1307, USA.
- *
- * Getting Source ==============
- *
- * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
+ * SPDX-FileCopyrightText: Copyright © 2018 WebGoat authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
-
 package org.owasp.webgoat.lessons.sqlinjection.mitigation;
 
 import static org.owasp.webgoat.container.assignments.AttackResultBuilder.failed;
@@ -61,7 +43,9 @@ public class SqlInjectionLesson10b implements AssignmentEndpoint {
   @ResponseBody
   public AttackResult completed(@RequestParam String editor) {
     try {
-      if (editor.isEmpty()) return failed(this).feedback("sql-injection.10b.no-code").build();
+      if (editor.isEmpty()) {
+        return failed(this).feedback("sql-injection.10b.no-code").build();
+      }
 
       editor = editor.replaceAll("\\<.*?>", "");
 
@@ -74,24 +58,24 @@ public class SqlInjectionLesson10b implements AssignmentEndpoint {
 
       String codeline = editor.replace("\n", "").replace("\r", "");
 
-      boolean setsUpConnection = this.check_text(regexSetsUpConnection, codeline);
-      boolean usesPreparedStatement = this.check_text(regexUsesPreparedStatement, codeline);
-      boolean usesSetString = this.check_text(regexUsesSetString, codeline);
-      boolean usesPlaceholder = this.check_text(regexUsesPlaceholder, codeline);
-      boolean usesExecute = this.check_text(regexUsesExecute, codeline);
-      boolean usesExecuteUpdate = this.check_text(regexUsesExecuteUpdate, codeline);
+      boolean setsUpConnection = this.checkText(regexSetsUpConnection, codeline);
+      boolean usesPreparedStatement = this.checkText(regexUsesPreparedStatement, codeline);
+      boolean usesSetString = this.checkText(regexUsesSetString, codeline);
+      boolean usesPlaceholder = this.checkText(regexUsesPlaceholder, codeline);
+      boolean usesExecute = this.checkText(regexUsesExecute, codeline);
+      boolean usesExecuteUpdate = this.checkText(regexUsesExecuteUpdate, codeline);
 
       boolean hasImportant =
-          (setsUpConnection
+          setsUpConnection
               && usesPreparedStatement
               && usesPlaceholder
               && usesSetString
-              && (usesExecute || usesExecuteUpdate));
+              && (usesExecute || usesExecuteUpdate);
       List<Diagnostic> hasCompiled = this.compileFromString(editor);
 
-      if (hasImportant && hasCompiled.size() < 1) {
+      if (hasImportant && hasCompiled.isEmpty()) {
         return success(this).feedback("sql-injection.10b.success").build();
-      } else if (hasCompiled.size() > 0) {
+      } else if (!hasCompiled.isEmpty()) {
         String errors = "";
         for (Diagnostic d : hasCompiled) {
           errors += d.getMessage(null) + "<br>";
@@ -115,8 +99,7 @@ public class SqlInjectionLesson10b implements AssignmentEndpoint {
     JavaCompiler.CompilationTask task =
         compiler.getTask(null, fileManager, diagnosticsCollector, null, null, fileObjects);
     Boolean result = task.call();
-    List<Diagnostic> diagnostics = diagnosticsCollector.getDiagnostics();
-    return diagnostics;
+    return diagnosticsCollector.getDiagnostics();
   }
 
   private SimpleJavaFileObject getJavaFileContentsAsString(String s) {
@@ -136,7 +119,7 @@ public class SqlInjectionLesson10b implements AssignmentEndpoint {
   }
 
   class JavaObjectFromString extends SimpleJavaFileObject {
-    private String contents = null;
+    private String contents;
 
     public JavaObjectFromString(String className, String contents) throws Exception {
       super(new URI(className), Kind.SOURCE);
@@ -148,10 +131,9 @@ public class SqlInjectionLesson10b implements AssignmentEndpoint {
     }
   }
 
-  private boolean check_text(String regex, String text) {
+  private boolean checkText(String regex, String text) {
     Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
     Matcher m = p.matcher(text);
-    if (m.find()) return true;
-    else return false;
+    return m.find();
   }
 }

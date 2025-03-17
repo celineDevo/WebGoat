@@ -1,26 +1,7 @@
 /*
- * This file is part of WebGoat, an Open Web Application Security Project utility. For details, please see http://www.owasp.org/
- *
- * Copyright (c) 2002 - 2019 Bruce Mayhew
- *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with this program; if
- * not, write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
- * 02111-1307, USA.
- *
- * Getting Source
- * ==============
- *
- * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
+ * SPDX-FileCopyrightText: Copyright © 2014 WebGoat authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
-
 package org.owasp.webgoat.lessons.idor;
 
 import static org.owasp.webgoat.container.assignments.AttackResultBuilder.failed;
@@ -76,7 +57,7 @@ public class IDOREditOtherProfile implements AssignmentEndpoint {
       // we will persist in the session object for now in case we want to refer back or use it later
       userSessionData.setValue("idor-updated-other-profile", currentUserProfile);
       if (currentUserProfile.getRole() <= 1
-          && currentUserProfile.getColor().equalsIgnoreCase("red")) {
+          && "red".equalsIgnoreCase(currentUserProfile.getColor())) {
         return success(this)
             .feedback("idor.edit.profile.success1")
             .output(currentUserProfile.profileToMap().toString())
@@ -84,7 +65,7 @@ public class IDOREditOtherProfile implements AssignmentEndpoint {
       }
 
       if (currentUserProfile.getRole() > 1
-          && currentUserProfile.getColor().equalsIgnoreCase("red")) {
+          && "red".equalsIgnoreCase(currentUserProfile.getColor())) {
         return failed(this)
             .feedback("idor.edit.profile.failure1")
             .output(currentUserProfile.profileToMap().toString())
@@ -92,7 +73,7 @@ public class IDOREditOtherProfile implements AssignmentEndpoint {
       }
 
       if (currentUserProfile.getRole() <= 1
-          && !currentUserProfile.getColor().equalsIgnoreCase("red")) {
+          && !"red".equalsIgnoreCase(currentUserProfile.getColor())) {
         return failed(this)
             .feedback("idor.edit.profile.failure2")
             .output(currentUserProfile.profileToMap().toString())
@@ -109,7 +90,7 @@ public class IDOREditOtherProfile implements AssignmentEndpoint {
       return failed(this).feedback("idor.edit.profile.failure4").build();
     }
 
-    if (currentUserProfile.getColor().equals("black") && currentUserProfile.getRole() <= 1) {
+    if ("black".equals(currentUserProfile.getColor()) && currentUserProfile.getRole() <= 1) {
       return success(this)
           .feedback("idor.edit.profile.success2")
           .output(userSessionData.getValue("idor-updated-own-profile").toString())
